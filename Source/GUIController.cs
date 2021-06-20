@@ -104,6 +104,13 @@ namespace Benchwarp
         {
             try
             {
+                string HideUIkey = Benchwarp.globalSettings.HideUIkey;
+                if ( HideUIkey != "")
+                {
+                    if (Input.GetKeyDown((KeyCode) Enum.Parse(typeof(KeyCode), HideUIkey)))
+                        Benchwarp.globalSettings.isUIEnabled = !Benchwarp.globalSettings.isUIEnabled;
+                }
+                
                 TopMenu.Update();
                 DetectHotkeys();
             }
@@ -115,7 +122,7 @@ namespace Benchwarp
 
         private void DetectHotkeys()
         { 
-            if (!(GameManager.instance != null && GameManager.instance.IsGamePaused() && Benchwarp.instance.globalSettings.EnableHotkeys))
+            if (!(GameManager.instance != null && GameManager.instance.IsGamePaused() && Benchwarp.globalSettings.EnableHotkeys))
             {
                 last2Keystrokes = "";
                 return;
