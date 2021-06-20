@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -171,7 +171,7 @@ namespace Benchwarp
                 "Warp"
             );
 
-            if (Benchwarp.instance.globalSettings.EnableDeploy)
+            if ( Benchwarp.globalSettings.EnableDeploy)
             {
                 foreach (KeyValuePair<string, (UnityAction<string>, Vector2)> pair in Buttons)
                 {
@@ -236,10 +236,10 @@ namespace Benchwarp
             }
             settings.SetActive(false, true);
 
-            if (Benchwarp.instance.globalSettings.WarpOnly) return;
+            if ( Benchwarp.globalSettings.WarpOnly) return;
 
             DoorWarpSelection.Clear();
-            if (Benchwarp.instance.globalSettings.DoorWarp)
+            if ( Benchwarp.globalSettings.DoorWarp)
             {
                 CanvasPanel door3 = MakePanel("Doors", new Vector2(-5f, 20f));
                 CanvasPanel door2 = MakePanel("Rooms", new Vector2(395f, 20f));
@@ -366,7 +366,7 @@ namespace Benchwarp
                              (string s) => bench.SetBench(),
                              new Rect(0f, 0f, 80f, 40f),
                              GUIController.Instance.TrajanNormal,
-                             !Benchwarp.instance.globalSettings.SwapNames ? Events.GetBenchName(bench.name) : Events.GetSceneName(bench.sceneName),
+                             ! Benchwarp.globalSettings.SwapNames ? Events.GetBenchName(bench.name) : Events.GetSceneName(bench.sceneName),
                              fontSize
                          );
             }
@@ -399,9 +399,8 @@ namespace Benchwarp
                 rootPanel.SetActive(false, true);
                 return;
             }
-
-            Benchwarp bw = Benchwarp.instance;
-            GlobalSettings gs = bw.globalSettings;
+            
+            GlobalSettings gs = Benchwarp.globalSettings;
 
             if (gs.ShowScene)
             {
@@ -410,7 +409,7 @@ namespace Benchwarp
             }
             else sceneNamePanel.SetActive(false, true);
 
-            if (GameManager.instance.IsGamePaused())
+            if (GameManager.instance.IsGamePaused() && Benchwarp.globalSettings.isUIEnabled)
             {
                 if (!rootPanel.active)
                 {
@@ -453,7 +452,7 @@ namespace Benchwarp
                 rootPanel.GetButton("Set")
                          .SetTextColor
                          (
-                             Benchwarp.instance.saveSettings.atDeployedBench
+                              Benchwarp.saveSettings.atDeployedBench
                                  ? Color.yellow
                                  : Color.white
                          );
@@ -561,7 +560,7 @@ namespace Benchwarp
 
         private static void WarpClicked(string buttonName)
         {
-            if (Benchwarp.instance.globalSettings.DoorWarp)
+            if ( Benchwarp.globalSettings.DoorWarp)
             {
                 if (!string.IsNullOrEmpty(DoorWarpSelection.door)) ChangeScene.ChangeToScene(DoorWarpSelection.room, DoorWarpSelection.door);
                 return;
@@ -573,21 +572,21 @@ namespace Benchwarp
         private static void DeployClicked(string buttonName)
         {
             if (onCooldown) return;
-            if (Benchwarp.instance.globalSettings.NoDarkOrDreamRooms && BenchMaker.IsDarkOrDreamRoom()) return;
-            if (Benchwarp.instance.globalSettings.NoMidAirDeploy && !HeroController.instance.CheckTouchingGround()) return;
+            if ( Benchwarp.globalSettings.NoDarkOrDreamRooms && BenchMaker.IsDarkOrDreamRoom()) return;
+            if ( Benchwarp.globalSettings.NoMidAirDeploy && !HeroController.instance.CheckTouchingGround()) return;
 
             BenchMaker.DestroyBench();
 
-            Benchwarp.instance.saveSettings.benchDeployed = true;
-            Benchwarp.instance.saveSettings.benchX = HeroController.instance.transform.position.x;
-            Benchwarp.instance.saveSettings.benchY = HeroController.instance.transform.position.y;
-            Benchwarp.instance.saveSettings.benchScene = GameManager.instance.sceneName;
+             Benchwarp.saveSettings.benchDeployed = true;
+             Benchwarp.saveSettings.benchX = HeroController.instance.transform.position.x;
+             Benchwarp.saveSettings.benchY = HeroController.instance.transform.position.y;
+             Benchwarp.saveSettings.benchScene = GameManager.instance.sceneName;
 
             BenchMaker.MakeBench();
 
             SetClicked(null);
 
-            if (!Benchwarp.instance.globalSettings.DeployCooldown) return;
+            if (! Benchwarp.globalSettings.DeployCooldown) return;
 
             cooldown = 300f;
             onCooldown = true;
@@ -595,30 +594,30 @@ namespace Benchwarp
 
         private static void SetClicked(string buttonName)
         {
-            if (!Benchwarp.instance.saveSettings.benchDeployed) return;
-            Benchwarp.instance.saveSettings.atDeployedBench = true;
+            if (! Benchwarp.saveSettings.benchDeployed) return;
+             Benchwarp.saveSettings.atDeployedBench = true;
         }
 
         #region Deploy options
 
         private static void StyleChanged(string buttonName)
         {
-            Benchwarp.instance.globalSettings.benchStyle = buttonName;
+             Benchwarp.globalSettings.benchStyle = buttonName;
             Benchwarp.instance.SaveGlobalSettings();
         }
 
         private static void CooldownClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.DeployCooldown = !Benchwarp.instance.globalSettings.DeployCooldown;
+             Benchwarp.globalSettings.DeployCooldown = ! Benchwarp.globalSettings.DeployCooldown;
             Benchwarp.instance.SaveGlobalSettings();
             cooldown = 0f;
         }
 
         private static void NoninteractiveClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.Noninteractive = !Benchwarp.instance.globalSettings.Noninteractive;
+             Benchwarp.globalSettings.Noninteractive = ! Benchwarp.globalSettings.Noninteractive;
             Benchwarp.instance.SaveGlobalSettings();
-            if (!Benchwarp.instance.globalSettings.Noninteractive && BenchMaker.DeployedBench != null)
+            if (! Benchwarp.globalSettings.Noninteractive && BenchMaker.DeployedBench != null)
             {
                 BenchMaker.MakeBench();
             }
@@ -626,25 +625,25 @@ namespace Benchwarp
 
         private static void NoMidAirDeployClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.NoMidAirDeploy = !Benchwarp.instance.globalSettings.NoMidAirDeploy;
+             Benchwarp.globalSettings.NoMidAirDeploy = ! Benchwarp.globalSettings.NoMidAirDeploy;
             Benchwarp.instance.SaveGlobalSettings();
         }
 
         private static void NoDarkOrDreamClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.NoDarkOrDreamRooms = !Benchwarp.instance.globalSettings.NoDarkOrDreamRooms;
+             Benchwarp.globalSettings.NoDarkOrDreamRooms = ! Benchwarp.globalSettings.NoDarkOrDreamRooms;
             Benchwarp.instance.SaveGlobalSettings();
         }
 
         private static void ReducePreloadClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.ReducePreload = !Benchwarp.instance.globalSettings.ReducePreload;
+             Benchwarp.globalSettings.ReducePreload = ! Benchwarp.globalSettings.ReducePreload;
             Benchwarp.instance.SaveGlobalSettings();
         }
 
         private static void NoPreloadClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.NoPreload = !Benchwarp.instance.globalSettings.NoPreload;
+             Benchwarp.globalSettings.NoPreload = ! Benchwarp.globalSettings.NoPreload;
             Benchwarp.instance.SaveGlobalSettings();
         }
 
@@ -654,7 +653,7 @@ namespace Benchwarp
 
         private static void WarpOnlyClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.WarpOnly = !Benchwarp.instance.globalSettings.WarpOnly;
+             Benchwarp.globalSettings.WarpOnly = ! Benchwarp.globalSettings.WarpOnly;
             Benchwarp.instance.SaveGlobalSettings();
             rootPanel.Destroy();
             sceneNamePanel.Destroy();
@@ -665,27 +664,27 @@ namespace Benchwarp
         {
             if (buttonName != null)
             {
-                Benchwarp.instance.globalSettings.UnlockAllBenches = !Benchwarp.instance.globalSettings.UnlockAllBenches;
+                 Benchwarp.globalSettings.UnlockAllBenches = ! Benchwarp.globalSettings.UnlockAllBenches;
                 Benchwarp.instance.SaveGlobalSettings();
             }
         }
 
         private static void ShowSceneClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.ShowScene = !Benchwarp.instance.globalSettings.ShowScene;
+             Benchwarp.globalSettings.ShowScene = ! Benchwarp.globalSettings.ShowScene;
             Benchwarp.instance.SaveGlobalSettings();
         }
 
         private static void SwapNamesClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.SwapNames = !Benchwarp.instance.globalSettings.SwapNames;
+             Benchwarp.globalSettings.SwapNames = ! Benchwarp.globalSettings.SwapNames;
             Benchwarp.instance.SaveGlobalSettings();
             RebuildMenu();
         }
 
         private static void EnableDeployClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.EnableDeploy = !Benchwarp.instance.globalSettings.EnableDeploy;
+             Benchwarp.globalSettings.EnableDeploy = ! Benchwarp.globalSettings.EnableDeploy;
             Benchwarp.instance.SaveGlobalSettings();
             BenchMaker.DestroyBench();
             RebuildMenu();
@@ -693,20 +692,20 @@ namespace Benchwarp
 
         private static void AlwaysToggleAllClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.AlwaysToggleAll = !Benchwarp.instance.globalSettings.AlwaysToggleAll;
+             Benchwarp.globalSettings.AlwaysToggleAll = ! Benchwarp.globalSettings.AlwaysToggleAll;
             Benchwarp.instance.SaveGlobalSettings();
         }
 
         private static void DoorWarpClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.DoorWarp = !Benchwarp.instance.globalSettings.DoorWarp;
+             Benchwarp.globalSettings.DoorWarp = ! Benchwarp.globalSettings.DoorWarp;
             Benchwarp.instance.SaveGlobalSettings();
             RebuildMenu();
         }
 
         private static void EnableHotkeysClicked(string buttonName)
         {
-            Benchwarp.instance.globalSettings.EnableHotkeys = !Benchwarp.instance.globalSettings.EnableHotkeys;
+             Benchwarp.globalSettings.EnableHotkeys = ! Benchwarp.globalSettings.EnableHotkeys;
             Benchwarp.instance.SaveGlobalSettings();
         }
 
