@@ -1,4 +1,4 @@
-﻿using GlobalEnums;
+using GlobalEnums;
 using Modding;
 using System;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace Benchwarp
             MenuButtonList.ClearAllLastSelected();
             PlayerData.instance.atBench = false; // kill bench storage
 
-            SceneLoad load = ReflectionHelper.GetAttr<GameManager, SceneLoad>(GameManager.instance, "sceneLoad");
+            SceneLoad load = ReflectionHelper.GetField<GameManager, SceneLoad>(GameManager.instance, "sceneLoad");
             if (load != null)
             {
                 load.Finish += () =>
@@ -49,7 +49,7 @@ namespace Benchwarp
         private static void LoadScene(string sceneName, string gateName, float delay)
         {
             GameManager.instance.StopAllCoroutines();
-            ReflectionHelper.SetAttr<GameManager, SceneLoad>(GameManager.instance, "sceneLoad", null);
+            ReflectionHelper.SetField<GameManager, SceneLoad>(GameManager.instance, "sceneLoad", null);
 
             GameManager.instance.BeginSceneTransition(new GameManager.SceneLoadInfo
             {
