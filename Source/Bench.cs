@@ -1,4 +1,4 @@
-﻿using GlobalEnums;
+using GlobalEnums;
 using System.Linq;
 
 namespace Benchwarp
@@ -83,14 +83,14 @@ namespace Benchwarp
 
         public bool visited
         {
-            get => Benchwarp.instance.saveSettings.visitedBenchScenes.ContainsKey(sceneName) ?
-                Benchwarp.instance.saveSettings.visitedBenchScenes[sceneName] : false;
-            set => Benchwarp.instance.saveSettings.visitedBenchScenes[sceneName] = value;
+            get => Benchwarp.saveSettings.visitedBenchScenes.ContainsKey(sceneName) ?
+                Benchwarp.saveSettings.visitedBenchScenes[sceneName] : false;
+            set => Benchwarp.saveSettings.visitedBenchScenes[sceneName] = value;
         }
         public bool benched => PlayerData.instance.respawnScene == sceneName &&
             PlayerData.instance.respawnMarkerName == respawnMarker &&
             PlayerData.instance.respawnType == respawnType &&
-            !Benchwarp.instance.saveSettings.atDeployedBench;
+            !Benchwarp.saveSettings.atDeployedBench;
 
         public Bench(string _name, string _areaName, string _sceneName, string _respawnMarker, int _respawnType, MapZone _mapZone, bool _preload = false, string _style = null)
         {
@@ -106,8 +106,8 @@ namespace Benchwarp
 
         public void SetBench()
         {
-            if (!Benchwarp.instance.globalSettings.UnlockAllBenches && !visited) return;
-            Benchwarp.instance.saveSettings.atDeployedBench = false;
+            if (!Benchwarp.globalSettings.UnlockAllBenches && !visited) return;
+            Benchwarp.saveSettings.atDeployedBench = false;
             PlayerData.instance.respawnScene = sceneName;
             PlayerData.instance.respawnMarkerName = respawnMarker;
             PlayerData.instance.respawnType = respawnType;
