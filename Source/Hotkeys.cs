@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,7 @@ namespace Benchwarp
         {
             foreach (var defaultBind in DefaultHotkeys)
             {
-                if (!Benchwarp.instance.globalSettings.HotkeyOverrides.TryGetValue(defaultBind.Key, out var mappedHotkey))
+                if (!Benchwarp.globalSettings.HotkeyOverrides.TryGetValue(defaultBind.Key, out var mappedHotkey))
                 {
                     mappedHotkey = defaultBind.Key;
                 }
@@ -98,8 +98,5 @@ namespace Benchwarp
             {"LB", -1},
             {"SB", -2}
         };
-
-
-
     }
 }
