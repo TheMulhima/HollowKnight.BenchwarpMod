@@ -232,7 +232,7 @@ namespace Benchwarp
             GameManager.instance.ui.AudioGoToGameplay(.2f);
         }
 
-        public bool? BenchWatcher(string target, bool val)
+        public bool BenchWatcher(string target, bool val)
         {
             if (target == "atBench" && val)
             {
@@ -244,11 +244,12 @@ namespace Benchwarp
                     break;
                 }
             }
-            return null;//dont want to change anything
+            return val;//dont want to change anything
         }
 
-        private bool RemoveRespawnFromDeployedBench(string name, string orig, out string res)
+        private string RemoveRespawnFromDeployedBench(string name, string orig)
         {
+            string res = orig;
             switch (name)
             {
                 case nameof(PlayerData.respawnMarkerName):
@@ -265,29 +266,29 @@ namespace Benchwarp
                     break;
             }
 
-            res = orig;
-            return false;//dont want to change anything
+            return res;//dont want to change anything
         }
 
-        private bool RespawnAtDeployedBench(string name, string orig, out string res)
+        private string RespawnAtDeployedBench(string name, string orig)
         {
+            string res = orig;
             if (!Benchwarp.saveSettings.atDeployedBench)
             {
-                res = orig;
-                return false;//dont want to change anything
+                return res;//dont want to change anything
             }
             switch (name)
             {
                 case nameof(PlayerData.respawnMarkerName):
                     res = BenchMaker.DEPLOYED_BENCH_RESPAWN_MARKER_NAME;
-                    return true;;
+                    break;
                 case nameof(PlayerData.respawnScene):
                     res = Benchwarp.saveSettings.benchScene;
-                    return true;;
+                    break;
                 default:
-                    res = orig;
-                    return false;//dont want to change anything
+                    break;
             }
+            return res;
+
         }
 
         private void FixRespawnType(On.GameManager.orig_OnNextLevelReady orig, GameManager self)
